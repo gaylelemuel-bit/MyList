@@ -11,6 +11,7 @@ struct TaskItem: Identifiable, Hashable {
     let id = UUID()
     var title: String
     var isCompleted: Bool = false
+    var drawingData: Data? = nil
 }
 
 struct TaskGroup: Identifiable, Hashable {

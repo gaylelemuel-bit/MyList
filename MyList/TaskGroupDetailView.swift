@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import PencilKit
 
 struct TaskGroupDetailView: View {
     @Binding var group: TaskGroup
     @Environment(\.horizontalSizeClass) var sizeClass
+    @State private var isShowingAddTask = false
     
     var body: some View {
         List {
@@ -30,9 +32,20 @@ struct TaskGroupDetailView: View {
                                 task.isCompleted.toggle()
                             }
                         }
-                    TextField("Task title", text: $task.title)
-                        .strikethrough(task.isCompleted)
-                        .foregroundStyle(task.isCompleted ? .gray : .primary)
+                    if let data = task.drawingData, let drawing = try? PKDrawing(data: data) {
+                        Image(uiImage: drawing.image(from: drawing.bounds, scale: 2))
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxHeight: 80)
+                            .padding(6)
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .opacity(task.isCompleted ? 0.4 : 1)
+                    } else {
+                        TextField("Task title", text: $task.title)
+                            .strikethrough(task.isCompleted)
+                            .foregroundStyle(task.isCompleted ? .gray : .primary)
+                    }
                 }
             }
             .onDelete{ index in
@@ -42,8 +55,13 @@ struct TaskGroupDetailView: View {
         .navigationTitle(group.title)
         .toolbar {
             Button("Add Task"){
+                isShowingAddTask = true
+            }
+        }
+        .sheet(isPresented: $isShowingAddTask) {
+            NewTaskView { newTask in
                 withAnimation {
-                    group.tasks.append(TaskItem(title: ""))
+                    group.tasks.append(newTask)
                 }
             }
         }
