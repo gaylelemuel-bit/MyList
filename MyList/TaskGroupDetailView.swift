@@ -12,6 +12,8 @@ struct TaskGroupDetailView: View {
     @Binding var group: TaskGroup
     @Environment(\.horizontalSizeClass) var sizeClass
     @State private var isShowingAddTask = false
+    @AppStorage("isDarkMode") private var isDarkMode = false
+    //@Binding var isDarkMode: Bool
     
     var body: some View {
         List {
@@ -54,8 +56,20 @@ struct TaskGroupDetailView: View {
         }
         .navigationTitle(group.title)
         .toolbar {
-            Button("Add Task"){
-                isShowingAddTask = true
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    isDarkMode.toggle()
+                  //  UserDefaults.standard.set(isDarkMode, forKey: "isDarkMode")
+                } label: {
+                    Image(systemName: isDarkMode ? "sun.max.fill" : "moon.fill")
+                }
+                .accessibilityLabel(isDarkMode ? "Use light mode" : "Use dark mode")
+            }
+
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Add Task"){
+                    isShowingAddTask = true
+                }
             }
         }
         .sheet(isPresented: $isShowingAddTask) {
@@ -65,5 +79,6 @@ struct TaskGroupDetailView: View {
                 }
             }
         }
+        .preferredColorScheme (isDarkMode ? .dark : .light)
     }
 }

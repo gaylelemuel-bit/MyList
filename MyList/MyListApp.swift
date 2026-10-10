@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct MyListApp: App {
+    @State private var isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
+
     var body: some Scene {
         WindowGroup {
             ContentView()
