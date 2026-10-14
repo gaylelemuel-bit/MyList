@@ -6,6 +6,11 @@
 	objectVersion = 110;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0F763521307F0A390035B2CD /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 0F763520307F0A390035B2CD /* Localizable.xcstrings */; };
+		0F763523307F183B0035B2CD /* MyList-InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 0F763522307F183B0035B2CD /* MyList-InfoPlist.xcstrings */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		0FA174F4307171E700BECB07 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F763520307F0A390035B2CD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		0F763522307F183B0035B2CD /* MyList-InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "MyList-InfoPlist.xcstrings"; sourceTree = "<group>"; };
 		0FA174E6307171E500BECB07 /* MyList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FA174F3307171E700BECB07 /* MyListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FA174FD307171E700BECB07 /* MyListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +76,8 @@
 		0FA174DD307171E500BECB07 = {
 			isa = PBXGroup;
 			children = (
+				0F763520307F0A390035B2CD /* Localizable.xcstrings */,
+				0F763522307F183B0035B2CD /* MyList-InfoPlist.xcstrings */,
 				0FA174E8307171E500BECB07 /* MyList */,
 				0FA174F6307171E700BECB07 /* MyListTests */,
 				0FA17500307171E700BECB07 /* MyListUITests */,
@@ -178,6 +187,14 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
+				ko,
+				cs,
+				tr,
+				it,
+				"pt-BR",
+				fr,
+				he,
 			);
 			mainGroup = 0FA174DD307171E500BECB07;
 			minimizedProjectReferenceProxies = 1;
@@ -197,6 +214,8 @@
 		0FA174E4307171E500BECB07 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
+				0F763523307F183B0035B2CD /* MyList-InfoPlist.xcstrings in Resources */,
+				0F763521307F0A390035B2CD /* Localizable.xcstrings in Resources */,
 			);
 		};
 		0FA174F1307171E700BECB07 /* Resources */ = {
@@ -303,6 +322,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -360,6 +380,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

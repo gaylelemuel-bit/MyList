@@ -36,7 +36,7 @@ struct NewTaskView: View {
             VStack(spacing: 0) {
                 Picker("Input", selection: $inputMode) {
                     ForEach(InputMode.allCases) { mode in
-                        Text(mode.rawValue).tag(mode)
+                        Text(LocalizedStringKey(mode.rawValue)).tag(mode)
                     }
                 }
                 .pickerStyle(.segmented)
@@ -90,9 +90,9 @@ struct NewTaskView: View {
         let newTask: TaskItem
         switch inputMode {
         case .type:
-            newTask = TaskItem(title: title.trimmingCharacters(in: .whitespaces))
+            newTask = TaskItem(title: String(localized: "Type"))
         case .draw:
-            newTask = TaskItem(title: "", drawingData: canvasView.drawing.dataRepresentation())
+            newTask = TaskItem(title: String(localized: "Draw"), drawingData: canvasView.drawing.dataRepresentation())
         }
         onSave(newTask)
         dismiss()

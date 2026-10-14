@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MyList App Development Report</title>
+<style>
+    @page { size: letter; margin: 0.8in; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; color: #1f2933; font-size: 10.5pt; line-height: 1.48; }
+    h1 { color: #123b5d; font-size: 24pt; text-align: center; margin: 0 0 8pt; }
+    .subtitle { text-align: center; color: #526675; margin: 0 0 24pt; }
+    .student { border: 1px solid #cad5dd; background: #f6f9fb; border-radius: 8px; padding: 12px 16px; margin-bottom: 22px; }
+    .student p { margin: 3px 0; }
+    h2 { color: #155e75; font-size: 15pt; margin: 18pt 0 6pt; padding-bottom: 3pt; border-bottom: 1px solid #cbdce4; }
+    p { margin: 0 0 8pt; }
+    ul { margin: 4pt 0 10pt 20pt; padding: 0; }
+    li { margin: 2pt 0; }
+    code { font-family: Menlo, Consolas, monospace; font-size: 9pt; background: #eef3f6; padding: 1px 4px; border-radius: 3px; }
+    pre { font-family: Menlo, Consolas, monospace; font-size: 8.6pt; line-height: 1.35; background: #eef3f6; border-left: 4px solid #2f8198; padding: 9px 12px; white-space: pre-wrap; page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    .footer-note { margin-top: 24pt; color: #667985; font-size: 9pt; text-align: center; }
+</style>
+</head>
+<body>
+<h1>MyList App Development Report</h1>
+<p class="subtitle">A SwiftUI Task-Management Application</p>
+
+<div class="student">
+    <p><strong>Student:</strong> ______________________________</p>
+    <p><strong>Professor:</strong> _____________________________</p>
+    <p><strong>Course:</strong> _______________________________</p>
+    <p><strong>Date:</strong> _________________________________</p>
+</div>
+
+<h2>Introduction</h2>
+<p>For this project, I created <strong>MyList</strong>, a task-management application using Swift, SwiftUI, and PencilKit. The purpose of the app is to let users organize tasks into groups, track their progress, and create tasks by either typing or drawing.</p>
+<p>While developing this project, I learned how to design an adaptive SwiftUI interface, manage state between views, save user data, support dark mode, and integrate a UIKit framework into a SwiftUI application.</p>
+
+<h2>Programming Language and Frameworks</h2>
+<p>The main programming language used for the project was <strong>Swift</strong>. I used several Apple frameworks:</p>
+<ul>
+    <li><strong>SwiftUI</strong> for the application interface and navigation.</li>
+    <li><strong>Foundation</strong> for data storage, JSON encoding, UUID values, and UserDefaults.</li>
+    <li><strong>PencilKit</strong> for drawing tasks with a finger or Apple Pencil.</li>
+    <li><strong>UIKit integration</strong> to display PKCanvasView inside SwiftUI.</li>
+</ul>
+<p>I learned how Swift's strong type system, structures, optionals, enumerations, computed properties, and closures can be combined to create an interactive application.</p>
+
+<h2>Data Models</h2>
+<p>I created two main data models: <code>TaskItem</code> and <code>TaskGroup</code>.</p>
+<p>A <code>TaskItem</code> stores a unique identifier, task title, completion status, and optional PencilKit drawing data. A <code>TaskGroup</code> stores a unique identifier, group title, SF Symbol name, and an array of tasks.</p>
+<p>Both models conform to <code>Identifiable</code>, <code>Hashable</code>, and <code>Codable</code>. Identifiable allows the models to work correctly inside SwiftUI lists. Hashable supports navigation and selection. Codable allows the models to be converted into data and saved.</p>
+
+<h2>Saving Data with UserDefaults</h2>
+<p>I learned how to preserve the user's task groups by combining <code>UserDefaults</code> with <code>JSONEncoder</code> and <code>JSONDecoder</code>.</p>
+<p>When the app moves into the background, the task-group array is encoded:</p>
+<pre>let encodedData = try? JSONEncoder().encode(taskGroups)</pre>
+<p>The encoded data is then stored in UserDefaults:</p>
+<pre>UserDefaults.standard.set(encodedData, forKey: saveKey)</pre>
+<p>When the app opens, it retrieves the saved data and decodes it back into an array of <code>TaskGroup</code> objects. If no saved data exists, the app loads sample data instead. This taught me that UserDefaults can store simple values directly, but custom Swift models must first be converted into Data.</p>
+
+<h2>Application Lifecycle</h2>
+<p>I used the SwiftUI scene-phase environment value:</p>
+<pre>@Environment(\.scenePhase) private var scenePhase</pre>
+<p>This allows the app to detect when it is active, inactive, or running in the background. When the app enters the background, it calls the data-saving function. This helped me understand that saving data should happen at appropriate points in the application lifecycle instead of relying only on button presses.</p>
+
+<h2>Dark Mode</h2>
+<p>I implemented a light and dark appearance toggle using a toolbar button. The button changes between sun and moon SF Symbols so the user can understand what appearance will be selected.</p>
+<p>The setting uses <code>@AppStorage</code>, which is SwiftUI's convenient property wrapper for a value stored in UserDefaults:</p>
+<pre>@AppStorage("isDarkMode") private var isDarkMode = false</pre>
+<p>The selected appearance is applied using:</p>
+<pre>.preferredColorScheme(isDarkMode ? .dark : .light)</pre>
+<p>This feature taught me the difference between reading system settings through <code>@Environment</code>, storing preferences with UserDefaults or AppStorage, and applying a preferred color scheme to a SwiftUI view hierarchy.</p>
+
+<h2>Split-Screen Navigation</h2>
+<p>The primary interface uses <code>NavigationSplitView</code>. It separates the app into a sidebar and a detail area. The sidebar displays all task groups, while the detail area displays the tasks belonging to the selected group. If the user has not selected a group, the app presents a <code>ContentUnavailableView</code>.</p>
+<p>This design works especially well on iPad because both columns can appear simultaneously. On smaller devices, SwiftUI automatically adapts the navigation interface to the available space. I also used <code>NavigationSplitViewVisibility</code> to manage the visibility of the split-view columns.</p>
+
+<h2>Responsive Layout and Resizing</h2>
+<p>I learned how to make the application adjust to different device sizes. The detail view reads the horizontal size class:</p>
+<pre>@Environment(\.horizontalSizeClass) var sizeClass</pre>
+<p>When the app has a regular-width layout, such as on many iPad configurations, it displays additional task statistics. On compact screens, that section is hidden to preserve space.</p>
+<p>The icon selector uses an adaptive LazyVGrid:</p>
+<pre>GridItem(.adaptive(minimum: 40))</pre>
+<p>This allows the number of icon columns to change automatically as the window or device width changes. These features helped me understand responsive layouts and how SwiftUI can adapt an interface without requiring separate screens for every device size.</p>
+
+<h2>Creating Task Groups</h2>
+<p>Users can create custom task groups from a modal sheet. The new-group screen includes a text field for the group name, an adaptive grid of SF Symbols, visual feedback for the selected symbol, Cancel and Save toolbar buttons, and a disabled Save button when the group name is empty.</p>
+<p>The completed group is returned to the main view through a closure. This taught me how child views can communicate results back to their parent views.</p>
+
+<h2>Creating Tasks</h2>
+<p>The new-task screen provides two input modes: <strong>Type</strong>, for entering a task with a text field, and <strong>Draw</strong>, for creating a handwritten or sketched task. I represented these options with an <code>InputMode</code> enumeration and displayed them using a segmented picker.</p>
+<p>A computed property determines whether the task is valid. For typed tasks, the title cannot be empty. For drawn tasks, the canvas must contain at least one stroke. The Save button remains disabled until the selected input is valid.</p>
+
+<h2>Drawing with PencilKit</h2>
+<p>One of the most important features I implemented was PencilKit drawing. Because <code>PKCanvasView</code> is a UIKit view, I created a <code>UIViewRepresentable</code> wrapper named <code>CanvasView</code>. This allowed me to display PencilKit content inside the SwiftUI interface.</p>
+<p>The wrapper creates and configures PKCanvasView, permits Apple Pencil and finger input, displays PKToolPicker, monitors drawing changes through a coordinator, and removes tool-picker observers when the view is dismissed.</p>
+<p>The drawing screen also includes Clear, Undo, and Redo controls with keyboard shortcuts. When a drawing task is saved, the PencilKit drawing is converted into Data:</p>
+<pre>canvasView.drawing.dataRepresentation()</pre>
+<p>The detail view later reconstructs the drawing using PKDrawing and displays it as an image. This taught me how SwiftUI and UIKit can work together when a required component is not a native SwiftUI view.</p>
+
+<h2>State Management and Data Flow</h2>
+<p>I used several SwiftUI state-management tools:</p>
+<ul>
+    <li><code>@State</code> for temporary values owned by a view.</li>
+    <li><code>@Binding</code> for editing data owned by a parent view.</li>
+    <li><code>@Environment</code> for system-provided values such as dismissal, scene phase, and size class.</li>
+    <li><code>@AppStorage</code> for a persistent appearance preference.</li>
+</ul>
+<p>For example, the detail view receives a binding to a TaskGroup. This allows it to edit tasks directly while keeping the main task-group array synchronized. This helped me understand that a view should own local state, while shared editable data should be passed using bindings.</p>
+
+<h2>Task Completion and Deletion</h2>
+<p>Users can mark a task as complete by tapping its circular icon. The app uses animation when changing the completion state. Completed typed tasks receive a checkmark icon, a strikethrough effect, and a gray foreground color. Completed drawing tasks become partially transparent.</p>
+<p>Users can also delete tasks with the standard SwiftUI list deletion gesture. These features taught me how to combine bindings, conditional styling, animations, and list actions.</p>
+
+<h2>Progress Statistics</h2>
+<p>I created <code>GroupStatsView</code> to calculate and display task progress. It uses computed properties to determine how many tasks are complete and the completion percentage.</p>
+<p>The progress is displayed using two layered circles. The foreground circle is trimmed based on the completion percentage and rotated so progress begins at the top. This taught me how to derive interface values from existing model data instead of storing duplicate state.</p>
+
+<h2>Accessibility and System Design</h2>
+<p>I used SF Symbols throughout the application so icons remain clear and consistent with Apple platforms. The dark-mode button also includes an accessibility label that changes according to its current action.</p>
+<p>The interface uses semantic system colors such as primary, gray, systemBackground, and secondarySystemBackground. These colors adapt more effectively to appearance changes than fixed colors.</p>
+
+<h2>Challenges and Problem Solving</h2>
+<p>Some of the main challenges included saving nested custom models in UserDefaults, passing editable data between multiple views, making navigation work on compact and regular screens, integrating a UIKit drawing view with SwiftUI, converting PencilKit drawings to data and restoring them, making dark mode affect the correct view hierarchy, validating two different task-input modes, and keeping the interface responsive when the window size changes.</p>
+<p>Solving these problems improved my understanding of debugging, compiler diagnostics, data flow, and breaking larger features into smaller components.</p>
+
+<h2>Conclusion</h2>
+<p>Developing MyList gave me practical experience with Swift and SwiftUI beyond building a basic list. I learned how to create reusable models and views, persist data, respond to application lifecycle changes, build adaptive split-screen navigation, support appearance changes, and integrate PencilKit drawing.</p>
+<p>The project also helped me understand how SwiftUI's declarative approach works: the interface updates automatically when its underlying state changes. Overall, MyList demonstrates task organization, persistent storage, responsive design, user preferences, progress visualization, and both typed and handwritten input.</p>
+
+<p class="footer-note">MyList App Development Report</p>
+</body>
+</html>
