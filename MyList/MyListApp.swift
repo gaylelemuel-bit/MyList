@@ -13,7 +13,7 @@ struct MyListApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ProfileView()
         }
     }
 }

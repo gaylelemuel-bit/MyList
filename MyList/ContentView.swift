@@ -16,17 +16,19 @@ struct ContentView: View {
     @State private var isShowingAddGroup = false
     @Environment(\.scenePhase) private var scenePhase
     let saveKey = "SaveTaskGroups"
+    @Binding var profile: Profile
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             List(selection:$selectGroup) {
-                ForEach(taskGroups) { group in
+                ForEach(profile.groups) { group in
                     NavigationLink(value: group) {
                         Label(group.title, systemImage: group.symbolName)
                     }
                 }
             }
-                .navigationTitle("Task Groups")
+            .navigationTitle(profile.name)
                 .listStyle(.sidebar)
                 .toolbar {
                     Button {
@@ -37,16 +39,17 @@ struct ContentView: View {
                 }
             } detail: {
                 if let group = selectGroup {
-                    if let index = taskGroups.firstIndex(where: { $0.id == group.id}) {
-                        TaskGroupDetailView(group: $taskGroups[index])
+                    if let index = profile.groups.firstIndex(where: { $0.id == group.id}) {
+                        TaskGroupDetailView(group: $profile.groups[index])
                     }
                 } else {
                     ContentUnavailableView("Select group", systemImage: "sidebar.left")
                 }
             }
+            .navigationBarHidden(true)
             .sheet(isPresented: $isShowingAddGroup){
                 NewGroupVew { newGroup in
-                    taskGroups.append(newGroup)
+                    profile.groups.append(newGroup)
                     selectGroup = newGroup
                 }
             }
@@ -65,18 +68,18 @@ struct ContentView: View {
             }
         }
     func saveData() {
-        if let encodedData = try? JSONEncoder().encode(taskGroups){
+        if let encodedData = try? JSONEncoder().encode(profile.groups){
             UserDefaults.standard.set(encodedData, forKey: saveKey)
         }
     }
     func loadData () {
         if let savedData = UserDefaults.standard.data(forKey: saveKey){
             if let decodedGroups = try? JSONDecoder().decode([TaskGroup].self, from: savedData){
-                taskGroups = decodedGroups
+                profile.groups = decodedGroups
                 return
             }
         }
-        taskGroups = TaskGroup.sampleData
+        profile.groups = TaskGroup.sampleData
     }
     }
 //#Preview {

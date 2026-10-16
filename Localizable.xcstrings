@@ -215,6 +215,22 @@
         }
       }
     },
+    "Choose a profile" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zvolte profil"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "프로필을 선택하세요"
+          }
+        }
+      }
+    },
     "Clear" : {
       "localizations" : {
         "cs" : {
@@ -471,6 +487,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Grup Adı"
+          }
+        }
+      }
+    },
+    "Home" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Domů"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "홈"
           }
         }
       }
@@ -892,6 +924,7 @@
       }
     },
     "Task Groups" : {
+      "extractionState" : "stale",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -1199,6 +1232,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aydınlık modu kullan"
+          }
+        }
+      }
+    },
+    "Welcome Back" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vítejte zpět!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bon retour !"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 다시 오신 것을 환영합니다!\n"
           }
         }
       }
